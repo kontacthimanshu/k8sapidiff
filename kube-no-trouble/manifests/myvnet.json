@@ -1,0 +1,80 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualNetworkName": {
+            "type": "string",
+            "defaultValue": "hikumap2svnet",
+            "metadata": {
+              "description": "Name of the VNET"
+            }
+          },
+          "aksSubnetName": {
+            "type": "string",
+            "defaultValue": "aks-Subnet",
+            "metadata": {
+              "description": "Name of the subnet in the virtual network"
+            }
+          },
+          "otherSubnetName": {
+            "type": "string",
+            "defaultValue": "other-Subnet",
+            "metadata": {
+              "description": "Name of the subnet in the virtual network"
+            }
+          },
+          "virtualNetworkAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.0.0/16",
+            "metadata": {
+              "description": "IP address range for the vNet"
+            }
+          },
+          "aksSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.0.0/17",
+            "metadata": {
+              "description": "IP address range for AKS subnet"
+            }
+          },
+          "otherSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.128.0/17",
+            "metadata": {
+              "description": "Other subnet range for other resources"
+            }
+          }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+            "name": "[parameters('virtualNetworkName')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2019-11-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('virtualNetworkAddressPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "aks-Subnet",
+                        "properties": {
+                            "addressPrefix": "[parameters('aksSubnetAddressPrefix')]"
+                        }
+                    },
+					{
+                        "name": "other-Subnet",
+                        "properties": {
+                            "addressPrefix": "[parameters('otherSubnetAddressPrefix')]"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "outputs": {}
+}
